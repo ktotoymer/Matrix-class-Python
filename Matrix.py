@@ -7,6 +7,15 @@ class Matrix:
     def __str__(self):
         return '\n'.join(['\t'.join(map(str, row)) for row in self.matrix])
 
+    def __eq__(self, other):
+        if self.m != other.m or self.n != other.m:
+            return False
+        for i in range(len(self.matrix)):
+            for j in range(len(self.matrix[0])):
+                if self.matrix[i][j] != other.matrix[i][j]:
+                    return False
+        return True
+
     def __add__(self, other):
         result = []
         if isinstance(other, Matrix):
@@ -70,6 +79,10 @@ class Matrix:
             ValueError("")
         return Matrix(result)
 
+    def transpose(self):
+        transposed_matrix = [[self.matrix[j][i] for j in range(len(self.matrix))] for i in range(len(self.matrix[0]))]
+        return Matrix(transposed_matrix)
+
 
 class SquareMatrix(Matrix):
     def __init__(self, matrix):
@@ -77,8 +90,21 @@ class SquareMatrix(Matrix):
         if self.m != self.n:
             raise ValueError("SquareMatrix должна быть квадратной матрицей")
 
+    def determinant(self):
+        n = self.n
+        if n == 1:
+            return self.matrix[0][0]
+        elif n == 2:
+            return self.matrix[0][0] * self.matrix[1][1] - self.matrix[0][1] * self.matrix[1][0]
+        else:
+            det = 0
+            for j in range(n):
+                minor = [row[:j] + row[j + 1:] for row in self.matrix[1:]]
+                det += (-1) ** j * self.matrix[0][j] * SquareMatrix(minor).determinant()
+            return det
 
-class IdentityMatrix(SquareMatrix):
+
+class IdentityMatrix(Matrix):
     def __init__(self, n):
         matrix = [[0] * n for _ in range(n)]
         for i in range(n):
