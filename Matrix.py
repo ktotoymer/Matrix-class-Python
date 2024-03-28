@@ -69,3 +69,28 @@ class Matrix:
         else:
             ValueError("")
         return Matrix(result)
+
+
+class SquareMatrix(Matrix):
+    def __init__(self, matrix):
+        super().__init__(matrix)
+        if self.m != self.n:
+            raise ValueError("SquareMatrix должна быть квадратной матрицей")
+
+
+class IdentityMatrix(SquareMatrix):
+    def __init__(self, n):
+        matrix = [[0] * n for _ in range(n)]
+        for i in range(n):
+            matrix[i][i] = 1
+        super().__init__(matrix)
+
+
+class StepMatrix(Matrix):
+    def __init__(self, m, n, step):
+        matrix = [[0] * n for _ in range(m)]
+        for i in range(m):
+            for j in range(n):
+                if i == j:
+                    matrix[i][j] = step
+        super().__init__(matrix)
