@@ -50,4 +50,22 @@ class Matrix:
         return Matrix(result)
 
     def __mul__(self, other):
-        pass
+        result = []
+        if isinstance(other, Matrix):
+            for i in range(len(self.matrix)):
+                row = []
+                for j in range(len(other.matrix[0])):
+                    element = 0
+                    for k in range(len(self.matrix[0])):
+                        element += self.matrix[i][k] * other.matrix[k][j]
+                    row.append(element)
+                result.append(row)
+        elif isinstance(other, int):
+            for i in range(len(self.matrix)):
+                row = []
+                for j in range(len(self.matrix[0])):
+                    row.append(self.matrix[i][j] * other)
+                result.append(row)
+        else:
+            ValueError("")
+        return Matrix(result)
